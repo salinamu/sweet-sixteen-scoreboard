@@ -1,23 +1,38 @@
-import '../inputform.css'
-import { useContext } from 'react';
-import { PointsContext } from '../App'
-
-
-
+import "../inputform.css";
+import { useContext } from "react";
+import { SquadsContext } from "../App";
 
 export default function Scoreboard(props) {
-    const { points } = useContext(PointsContext);
-    const { setPoints } = useContext(PointsContext);
+  const { squads } = useContext(SquadsContext);
+  const { setSquads } = useContext(SquadsContext);
+  const totalPoints = squads.reduce(
+    (total, currentValue) => (total = total + currentValue.points),
+    0
+  );
+  
+  console.log(totalPoints);
 
+  function clear() {
+    squads.map((squad) => {
+
+        squad.points = 0;
+
+    });
+  }
 
 
   return (
-<div>
-<p>Total Points: {points}</p>
-<button onClick={() => setPoints(0)}>
-      Clear
-    </button>
+    <div>
+      {squads.map((squad) => {
+        return (
+          <p>
+            {squad.name} {squad.points}
+          </p>
+        );
+      })}
 
-</div>
-);
+      <p>Total Points: {totalPoints}</p>
+      <button onClick={clear}>Clear</button>
+    </div>
+  );
 }

@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
 import { useEffect } from "react";
-
 import Input from "./components/inputfield.js";
 import Scoreboard from "./components/scoreboard.js";
 
@@ -10,17 +9,7 @@ import "./App.css";
 
 // Create a new context and export
 export const PointsContext = createContext();
-
-// Create a Context Provider
-const PointsContextProvider = ({ children }) => {
-  const [points, setPoints] = useState(0);
-
-  return (
-    <PointsContext.Provider value={{ points, setPoints }}>
-      {children}
-    </PointsContext.Provider>
-  );
-};
+export const SquadsContext = createContext();
 
 function App() {
   const initialSquads = [
@@ -103,97 +92,76 @@ function App() {
       pointValue: 6,
     },
   ];
-  const [squads, setSquads] = React.useState(initialSquads);
   const [treat, setTreat] = React.useState("");
-  const [visible, setVisible] = React.useState(false);
-  const [minCount, setMinCount] = React.useState(1);
-  const totalPoints = squads.reduce(
-    (total, currentValue) => (total = total + currentValue.points),
-    0
-  );
+  const [squads, setSquads] = React.useState(initialSquads);
 
-  console.log(totalPoints);
+  const [squad, setSquad] = React.useState("");
+  const [visible, setVisible] = React.useState(false);
+
+  const [points, setPoints] = useState(0);
+
+  // Create a Context Provider
+
+
   /*handle squads*/
   function handleAddSquad(name) {
-    setSquads([
-      ...squads,
-      {
-        id: squads.length - 1,
-        name: name,
-        points: 0,
-      },
-    ]);
-  }
-
-  function handleAddSquadPoints(name, points) {
-    setSquads(
-      squads.map((squad) => {
-        if (squad.name === name) {
-          squad.points = squad.points + points;
-        } else {
-          return;
-        }
-      })
-    );
-  }
-
-  function updateMinCount() {
-    if (treat === "Theatre Box Candy") {
-      setMinCount(1);
-    } else if (treat === "Candy Assorted") {
-      setMinCount(5);
-    } else if (treat === "Snack Variety") {
-      setMinCount(1);
-    } else if (treat === "Dum Dums") {
-      setMinCount(15);
-    } else if (treat === "Juice Soda") {
-      setMinCount(1);
-    } else if (treat === "Cookies and Cupcakes") {
-      setMinCount(1);
-    } else {
+    if (!squads.find((squad) => squad.name === name)) {
+      setSquads([
+        ...squads,
+        {
+          id: squads.length - 1,
+          name: name,
+          points: 0,
+        },
+      ]);
     }
   }
-  const handleChange = (event) => {
+
+
+
+  const handleSelectTreat = (event) => {
     setTreat(event.target.value);
     setVisible(true);
   };
-  useEffect(() => {
-    console.log(treat);
-    updateMinCount(); // Access the updated value here
-  }, [treat]);
+  const handleSelectSquad = (event) => {
+    setSquad(event.target.value);
+  };
+
   return (
     <div>
-      <PointsContextProvider>
-        <h1>Sweet Sixteen Scoreboard</h1>
-        <button onClick={() => handleAddSquad("Jordan")}>
-          Add squad named Jordan
-        </button>
-        <Scoreboard points={0} />
-        <p>
-          {squads.map((squad) => {
-            return squad.name;
-          }).join(' | ')}
-        </p>
-        <h2>Select Squad</h2>
+      <PointsContext.Provider value={{ points, setPoints }}>
+        <SquadsContext.Provider value={{ squads, setSquads }}>
+          <h1>Sweet Sixteen Scoreboard</h1>
+          <button onClick={() => handleAddSquad("Jordan")}>
+            Add squad named Jordan
+          </button>
+          <Scoreboard />
+        
+          <h2>Select Squad</h2>
 
-        <select>
-          {
-          squads.map((squad) => {
-            return <option key={squad.name}>{squad.name}</option>;
-          })
-          }
-        </select>
+          <select value={squad} onChange={handleSelectSquad}>
+            <option value="Select Squad" defaultValue hidden>
+              Select Squad
+            </option>
+            {squads.map((squad) => {
+              return <option value={squad.name}>{squad.name}</option>;
+            })}
+          </select>
 
-        <h2>Select Treat Type</h2>
+          <h2>Select Treat</h2>
 
-        <select onChange={handleChange}>
-          {treats.map((treat) => {
-            return <option key={treat.category}>{treat.category}</option>;
-          })}
-        </select>
+          <select value={treat} onChange={handleSelectTreat}>
+            <option value="Select Treat" defaultValue hidden>
+              Select Treat
+            </option>
+            {treats.map((treat) => {
+              return <option value={treat.category}>{treat.category}</option>;
+            })}
+          </select>
 
-        {visible ? <Input minCount={minCount} itemName={treat} /> : null}
-      </PointsContextProvider>
+          {visible ? <Input itemName={treat} squad = {squad} /> : null}
+        </SquadsContext.Provider>
+      </PointsContext.Provider>
     </div>
   );
 }

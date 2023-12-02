@@ -1,15 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
-import { useEffect } from "react";
 import Input from "./components/inputfield.js";
 import Scoreboard from "./components/scoreboard.js";
 
 import "./App.css";
 
 // Create a new context and export
-export const PointsContext = createContext();
 export const SquadsContext = createContext();
+export const TreatsContext = createContext();
 
 function App() {
   const initialSquads = [
@@ -92,16 +91,10 @@ function App() {
       pointValue: 6,
     },
   ];
-  const [treat, setTreat] = React.useState("");
-  const [squads, setSquads] = React.useState(initialSquads);
+  const [treatOption, setTreatOption] = useState("");
+  const [squads, setSquads] = useState(initialSquads);
 
-  const [squad, setSquad] = React.useState("");
-  const [visible, setVisible] = React.useState(false);
-
-  const [points, setPoints] = useState(0);
-
-  // Create a Context Provider
-
+  const [squadOption, setSquadOption] = useState("");
 
   /*handle squads*/
   function handleAddSquad(name) {
@@ -114,32 +107,30 @@ function App() {
           points: 0,
         },
       ]);
+    } else {
+      console.log("squad by name [" + name + "] already exists");
     }
   }
 
-
-
-  const handleSelectTreat = (event) => {
-    setTreat(event.target.value);
-    setVisible(true);
+  const handleSelectTreatOption = (event) => {
+    setTreatOption(event.target.value);
   };
-  const handleSelectSquad = (event) => {
-    setSquad(event.target.value);
+  const handleSelectSquadOption = (event) => {
+    setSquadOption(event.target.value);
   };
 
   return (
     <div>
-      <PointsContext.Provider value={{ points, setPoints }}>
-        <SquadsContext.Provider value={{ squads, setSquads }}>
+      <SquadsContext.Provider value={{ squads, setSquads }}>
+        <TreatsContext.Provider value={{ treats }}>
           <h1>Sweet Sixteen Scoreboard</h1>
           <button onClick={() => handleAddSquad("Jordan")}>
             Add squad named Jordan
           </button>
           <Scoreboard />
-        
-          <h2>Select Squad</h2>
 
-          <select value={squad} onChange={handleSelectSquad}>
+          <h2>Select Squad</h2>
+          <select value={squadOption} onChange={handleSelectSquadOption}>
             <option value="Select Squad" defaultValue hidden>
               Select Squad
             </option>
@@ -148,20 +139,28 @@ function App() {
             })}
           </select>
 
-          <h2>Select Treat</h2>
+          {squadOption && (
+            <div>
+              <h2>Select Treat</h2>
+              <select value={treatOption} onChange={handleSelectTreatOption}>
+                <option value="Select Treat" defaultValue hidden>
+                  Select Treat
+                </option>
+                {treats.map((treat) => {
+                  return (
+                    <option value={treat.category}>{treat.category}</option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
 
-          <select value={treat} onChange={handleSelectTreat}>
-            <option value="Select Treat" defaultValue hidden>
-              Select Treat
-            </option>
-            {treats.map((treat) => {
-              return <option value={treat.category}>{treat.category}</option>;
-            })}
-          </select>
-
-          {visible ? <Input itemName={treat} squad = {squad} /> : null}
-        </SquadsContext.Provider>
-      </PointsContext.Provider>
+          {treatOption && (
+            <Input itemName={treatOption} squadName={squadOption} />
+          )}
+          
+        </TreatsContext.Provider>
+      </SquadsContext.Provider>
     </div>
   );
 }

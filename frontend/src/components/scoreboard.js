@@ -5,21 +5,20 @@ import { SquadsContext } from "../App";
 export default function Scoreboard(props) {
   const { squads } = useContext(SquadsContext);
   const { setSquads } = useContext(SquadsContext);
+
   const totalPoints = squads.reduce(
     (total, currentValue) => (total = total + currentValue.points),
     0
   );
-  
-  console.log(totalPoints);
 
-  function clear() {
-    squads.map((squad) => {
-
+  function handleClear() {
+    setSquads(
+      squads.map((squad) => {
         squad.points = 0;
-
-    });
+        return squad;
+      })
+    );
   }
-
 
   return (
     <div>
@@ -32,7 +31,7 @@ export default function Scoreboard(props) {
       })}
 
       <p>Total Points: {totalPoints}</p>
-      <button onClick={clear}>Clear</button>
+      <button onClick={handleClear}>Clear</button>
     </div>
   );
 }

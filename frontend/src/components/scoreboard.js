@@ -1,6 +1,7 @@
 import "../inputform.css";
 import { useContext } from "react";
 import { SquadsContext } from "../App";
+import Collapsible from "react-collapsible";
 
 export default function Scoreboard(props) {
   const { squads } = useContext(SquadsContext);
@@ -25,7 +26,9 @@ export default function Scoreboard(props) {
       {squads.map((squad) => {
         return (
           <p>
-            {squad.name} {squad.points}
+            <Collapsible trigger={squad.name + " " + squad.points}>
+              <p>placeholder</p>
+            </Collapsible>
           </p>
         );
       })}

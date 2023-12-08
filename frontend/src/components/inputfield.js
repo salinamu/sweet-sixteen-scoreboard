@@ -2,8 +2,11 @@ import { useState } from "react";
 import "../inputfield.css";
 import { useContext } from "react";
 import { SquadsContext, TreatsContext } from "../App";
+import { createContext } from "react";
+
 
 export default function Input(props) {
+
   const [value, setValue] = useState("");
 
   const onInput = (e) => setValue(e.target.value);
@@ -13,17 +16,22 @@ export default function Input(props) {
 
   const itemName = props.itemName;
   var pointsMultiplier = 1;
+  var treatCategory = "";
+
 
   function getPointsMultiplier(category) {
     treats.map((treat) => {
       if (treat.category === category) {
+        treatCategory = category;
         pointsMultiplier = treat.pointValue / treat.countPerPointValue;
       }
       return treat;
     });
     return pointsMultiplier;
   }
+  function logPoints(name, points, category) {
 
+  }
   function handleAddSquadPoints(name, points) {
     setSquads(
       squads.map((squad) => {

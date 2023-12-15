@@ -34,7 +34,6 @@ function App() {
         },
       ]);
     } else {
-      console.log("treat by category [" + category + "] already exists");
     }
   }
 
@@ -50,7 +49,6 @@ function App() {
         },
       ]);
     } else {
-      console.log("squad by name [" + name + "] already exists");
     }
   }
 

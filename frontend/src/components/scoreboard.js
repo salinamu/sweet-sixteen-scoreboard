@@ -27,7 +27,11 @@ export default function Scoreboard(props) {
         return (
           <p>
             <Collapsible trigger={squad.name + " " + squad.points}>
-              <p>placeholder</p>
+              {squad.log.map((entry) => {
+                return (
+                      <p>{"-"+entry.treatName + ", " + entry.pointsCount}</p>
+                );
+              })}
             </Collapsible>
           </p>
         );

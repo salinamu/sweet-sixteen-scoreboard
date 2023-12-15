@@ -29,8 +29,22 @@ export default function Input(props) {
     });
     return pointsMultiplier;
   }
-  function logPoints(name, points, category) {
-
+  function updateLog(name, points, category) {
+    setSquads(
+      squads.map((squad) => {
+        if (squad.name === name) {
+          treats.map((treat) => {
+            if (treat.category === category) {
+              squad.log.push({treatName: category, pointsCount: points});
+          console.log(squad.log[squad.log.length - 1].pointsCount);
+            }
+            return treat;
+          });
+          
+        }
+        return squad;
+      })
+    );
   }
   function handleAddSquadPoints(name, points) {
     setSquads(
@@ -53,6 +67,9 @@ export default function Input(props) {
           props.squadName,
           Math.round(parseInt(e.target.value) * getPointsMultiplier(itemName))
         );
+        updateLog(props.squadName,
+          Math.round(parseInt(e.target.value) * getPointsMultiplier(itemName)),itemName);
+
       }
       setValue("");
     }

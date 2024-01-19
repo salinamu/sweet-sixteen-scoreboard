@@ -87,6 +87,8 @@ export default function Input(props) {
               label="Squad"
               onChange={handleSelectSquadOption}
               autoWidth
+              error={squadOption === ""}
+  helperText={squadOption === "" ? 'Empty field!' : ' '}
             >
               {squads.map((squad) => {
                 return <MenuItem value={squad.name}>{squad.name}</MenuItem>;
@@ -103,6 +105,8 @@ export default function Input(props) {
                 label="Treat"
                 onChange={handleSelectTreatOption}
                 autoWidth
+                error={treatOption === ""}
+  helperText={treatOption === "" ? 'Empty field!' : ' '}
               >
                 {treats.map((treat) => {
                   return (

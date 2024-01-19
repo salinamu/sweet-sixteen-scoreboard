@@ -3,6 +3,12 @@ import { useState } from "react";
 import { createContext } from "react";
 import Input from "./components/inputfield.js";
 import Scoreboard from "./components/scoreboard.js";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import Box from "@mui/material/Box";
+
 
 
 import "./App.css";
@@ -12,14 +18,10 @@ export const SquadsContext = createContext();
 export const TreatsContext = createContext();
 
 function App() {
-  const initialSquads = [
-  ];
-  const initialTreats = [
-  ];
+  const initialSquads = [];
+  const initialTreats = [];
   const [squads, setSquads] = useState(initialSquads);
   const [treats, setTreats] = useState(initialTreats);
-  const [squadOption, setSquadOption] = useState("");
-  const [treatOption, setTreatOption] = useState("");
 
 
   function handleAddTreat(category, countPerPointValue, pointValue) {
@@ -30,7 +32,7 @@ function App() {
           id: treats.length - 1,
           category: category,
           countPerPointValue: countPerPointValue,
-          pointValue: pointValue
+          pointValue: pointValue,
         },
       ]);
     } else {
@@ -45,74 +47,45 @@ function App() {
           id: squads.length - 1,
           name: name,
           points: 0,
-          log: []
+          log: [],
         },
       ]);
     } else {
     }
   }
 
-  const handleSelectTreatOption = (event) => {
-    setTreatOption(event.target.value);
-  };
-  const handleSelectSquadOption = (event) => {
-    setSquadOption(event.target.value);
-  };
-  handleAddSquad('Boyband');
-  handleAddSquad('High School Musical');
-  handleAddSquad('Lifeguards');
-  handleAddSquad('Royals');
-  handleAddSquad('Cops');
-  handleAddSquad('Aliens');
-  handleAddSquad('Vikings');
-  handleAddSquad('Ninja');
 
-  handleAddTreat('Theatre Box Candy', 1, 3);
-  handleAddTreat('Candy Assorted', 5, 1);
-  handleAddTreat('Snack Variety', 20, 15);
-  handleAddTreat('Dum Dums', 15, 1);
-  handleAddTreat('Juice Soda', 1, 1);
-  handleAddTreat('Cookies and Cupcakes', 12, 6);
+  handleAddSquad("Boyband");
+  handleAddSquad("High School Musical");
+  handleAddSquad("Lifeguards");
+  handleAddSquad("Royals");
+  handleAddSquad("Cops");
+  handleAddSquad("Aliens");
+  handleAddSquad("Vikings");
+  handleAddSquad("Ninja");
+
+  handleAddTreat("Theatre Box Candy", 1, 3);
+  handleAddTreat("Candy Assorted", 5, 1);
+  handleAddTreat("Snack Variety", 20, 15);
+  handleAddTreat("Dum Dums", 15, 1);
+  handleAddTreat("Juice Soda", 1, 1);
+  handleAddTreat("Cookies and Cupcakes", 12, 6);
 
   return (
     <div>
       <SquadsContext.Provider value={{ squads, setSquads }}>
         <TreatsContext.Provider value={{ treats, setTreats }}>
-          <h1>Sweet Sixteen Scoreboard</h1>
-          <button onClick={() => handleAddSquad("Jordan")}>
-            Add squad named Jordan
-          </button>
+
           <Scoreboard />
 
-          <h2>Select Squad</h2>
-          <select value={squadOption} onChange={handleSelectSquadOption}>
-            <option value="Select Squad" defaultValue hidden>
-              Select Squad
-            </option>
-            {squads.map((squad) => {
-              return <option value={squad.name}>{squad.name}</option>;
-            })}
-          </select>
+          <Box sx={{ m: 1, fontWeight: "fontWeightBold", fontSize: "h5.fontSize" }}>
+            Add Points
+          </Box>
 
-          {squadOption && (
-            <div>
-              <h2>Select Treat</h2>
-              <select value={treatOption} onChange={handleSelectTreatOption}>
-                <option value="Select Treat" defaultValue hidden>
-                  Select Treat
-                </option>
-                {treats.map((treat) => {
-                  return (
-                    <option value={treat.category}>{treat.category}</option>
-                  );
-                })}
-              </select>
-            </div>
-          )}
+         
+          <Input/>
 
-          {treatOption && (
-            <Input itemName={treatOption} squadName={squadOption} />
-          )}
+
 
         </TreatsContext.Provider>
       </SquadsContext.Provider>

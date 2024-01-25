@@ -1,15 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
-import Input from "./components/inputfield.js";
-import Scoreboard from "./components/scoreboard.js";
+import Form from "./components/Form.js";
+import Scoreboard from "./components/Scoreboard.js";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Box from "@mui/material/Box";
-
-
+import Grid from "@mui/material/Grid";
 
 import "./App.css";
 
@@ -54,7 +53,6 @@ function App() {
     }
   }
 
-
   handleAddSquad("Boyband");
   handleAddSquad("High School Musical");
   handleAddSquad("Lifeguards");
@@ -75,18 +73,23 @@ function App() {
     <div>
       <SquadsContext.Provider value={{ squads, setSquads }}>
         <TreatsContext.Provider value={{ treats, setTreats }}>
-
-          <Scoreboard />
-
-          <Box sx={{ m: 1, fontWeight: "fontWeightBold", fontSize: "h5.fontSize" }}>
-            Add Points
-          </Box>
-
-         
-          <Input/>
-
-
-
+          <Grid container spacing={0} columns={12}>
+            <Grid item xs={6}>
+              <Scoreboard />
+            </Grid>
+            <Grid item xs={6}>
+              <Box
+                sx={{
+                  m: 1,
+                  fontWeight: "fontWeightBold",
+                  fontSize: "h5.fontSize",
+                }}
+              >
+                Add Points
+              </Box>
+              <Form />
+            </Grid>
+          </Grid>
         </TreatsContext.Provider>
       </SquadsContext.Provider>
     </div>

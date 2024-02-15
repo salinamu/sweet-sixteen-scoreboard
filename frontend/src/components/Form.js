@@ -10,10 +10,11 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 
+
 export default function Form(props) {
   const [pieceCountValue, setPieceCountValue] = useState("");
   const [itemCountValue, setItemCountValue] = useState("");
-  const { squads, setSquads } = useContext(SquadsContext);
+  const { squads, setSquads, prevSquad, setPrevSquad } = useContext(SquadsContext);
   const { treats } = useContext(TreatsContext);
   const [squadOptionValue, setSquadOptionValue] = useState("");
   const [treatOptionValue, setTreatOptionValue] = useState("");
@@ -21,7 +22,6 @@ export default function Form(props) {
   const [isTreatOptionValid, setIsTreatOptionValid] = useState(true);
   const [isPieceCountValid, setIsPieceCountValid] = useState(true);
   const [isItemCountValid, setIsItemCountValid] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
 
   var pointsMultiplier = 1;
   const onInputPieceCount = (e) => {
@@ -124,18 +124,22 @@ export default function Form(props) {
                 id: squad.log.length,
                 treatName: category,
                 pointsCount: points,
-                entered: time
+                entered: time,
               });
               console.log(squad.log[squad.log.length - 1].pointsCount);
             }
             return treat;
           });
+          const newTotal = squad.total + points;
+          squad.total = newTotal;
         }
         return squad;
       })
     );
   }
-  function handleOnClick(e) {
+  function handleSubmit(event) {
+    event.preventDefault();
+
     var timestamp = new Date();
   timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   var enteredPoints = Math.round(
@@ -150,15 +154,17 @@ export default function Form(props) {
         treatOptionValue,
         timestamp
       );
+      props.addMessage(enteredPoints + " points added to squad " + squadOptionValue)
+      setPrevSquad(squadOptionValue);
       setPieceCountValue("");
       setItemCountValue("");
       setTreatOptionValue("");
       setSquadOptionValue("");
     }
-    setSubmitted(true);
   }
   return (
     <div>
+      <form onSubmit = {handleSubmit}>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="squad-select-label">Squad</InputLabel>
         <Select
@@ -239,9 +245,12 @@ export default function Form(props) {
         )}
       </FormControl>
       <br />
-      <Button sx={{ m: 1 }} variant="contained" onClick={handleOnClick}>
-        Add
+
+      <Button sx={{ m: 1}} type="submit"
+variant="contained" >
+        Add Points
       </Button>
+      </form>
     </div>
   );
-}
+}   

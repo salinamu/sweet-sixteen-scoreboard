@@ -48,10 +48,7 @@ export default function Scoreboard(props) {
   function getPointsTotal() {
     var PointsTotal = 0;
     squads.map((squad) => {
-      PointsTotal += squad.log.reduce(
-        (total, currentValue) => (total = total + currentValue.pointsCount),
-        0
-      );
+      PointsTotal += squad.total;
       return squad;
     });
     return PointsTotal;
@@ -80,11 +77,7 @@ export default function Scoreboard(props) {
                   primary={
                     squad.name +
                     " " +
-                    squad.log.reduce(
-                      (total, currentValue) =>
-                        (total = total + currentValue.pointsCount),
-                      0
-                    )
+                    squad.total
                     + " points"
                   }
                 />

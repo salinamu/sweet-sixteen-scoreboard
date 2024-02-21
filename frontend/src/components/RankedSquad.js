@@ -5,7 +5,7 @@ export default function RankedSquad(props) {
         <div>
             <div className="squad">
             <div className="rank">
-                {props.rank}
+                #{props.rank}
             </div>
             <div className="squadName">
             {props.squadName}

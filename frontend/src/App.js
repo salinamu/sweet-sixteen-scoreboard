@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import MenuAppBar from "./components/MenuAppBar.js";
 import "./App.css";
-import { themeOptions } from "./components/CustomTheme.js";
+import { theme } from "./components/CustomTheme.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Leaderboard from "./components/Leaderboard.js";
 import Container from "@mui/material/Container";
@@ -86,23 +86,20 @@ function App() {
   handleAddTreat("Cookies and Cupcakes", 12, 6);
 
   return (
-    <div>
-      <ThemeProvider theme={themeOptions}>
-        <MenuAppBar appName="Sweet16" />
+      <ThemeProvider theme={theme}>
+            <div  style={{ background: theme.palette.primary.mainGradient }}>
+
         <SquadsContext.Provider value={{ squads, setSquads, prevSquad, setPrevSquad }}>
           <TreatsContext.Provider value={{ treats, setTreats }}>
+
             <Container fluid>
-              <Grid container spacing={0} columns={12}>
+
+              <Grid container spacing={0} columns={12} >
+              <MenuAppBar appName="Sweet16"/>
+
+
                 <Grid item xs={6}>
-                  <Box
-                    sx={{
-                      m: 1,
-                      fontWeight: "fontWeightBold",
-                      fontSize: "h5.fontSize",
-                    }}
-                  >
-                    Leaderboard
-                  </Box>
+                  
                   <Leaderboard />
                 </Grid>
                 <Grid item xs={6}>
@@ -125,8 +122,9 @@ function App() {
             </Container>
           </TreatsContext.Provider>
         </SquadsContext.Provider>
+        </div>
+
       </ThemeProvider>
-    </div>
   );
 }
 

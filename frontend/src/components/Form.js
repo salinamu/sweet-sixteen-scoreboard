@@ -10,6 +10,8 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import PointHistory from "./PointHistory";
+import {theme} from './CustomTheme.js'
+import { ThemeProvider } from '@mui/material/styles';
 
 
 export default function Form(props) {
@@ -165,6 +167,8 @@ export default function Form(props) {
   }
   return (
     <div>
+          <ThemeProvider theme={theme}>
+
       <form onSubmit = {handleSubmit}>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="squad-select-label">Squad</InputLabel>
@@ -177,6 +181,11 @@ export default function Form(props) {
           autoWidth
           error={!isSquadOptionValid}
           onBlur={handleOnBlurSquadOption}
+          sx={{
+            [`& fieldset`]: {
+              borderRadius: 100,
+            },
+        }}
         >
           {squads.map((squad) => {
             return <MenuItem value={squad.name}>{squad.name}</MenuItem>;
@@ -200,6 +209,11 @@ export default function Form(props) {
           autoWidth
           error={!isTreatOptionValid}
           onBlur={handleOnBlurTreatOption}
+          sx={{
+            [`& fieldset`]: {
+              borderRadius: 100,
+            },
+        }}
         >
           {treats.map((treat) => {
             return <MenuItem value={treat.category}>{treat.category}</MenuItem>;
@@ -214,13 +228,17 @@ export default function Form(props) {
       <FormControl sx={{ m: 1, maxWidth: 120 }}>
         <TextField
           autoComplete="off"
-          id="outlined"
           label="Pieces"
           placeholder="#"
           value={pieceCountValue}
           onInput={onInputPieceCount}
           onBlur={handleOnBlurPieceCount}
           error={!isPieceCountValid}
+          sx={{
+            [`& fieldset`]: {
+              borderRadius: 100,
+            },
+        }}
         />
         {!isPieceCountValid && (
           <FormHelperText error={!isPieceCountValid}>
@@ -231,13 +249,18 @@ export default function Form(props) {
       <FormControl sx={{ m: 1, maxWidth: 120 }}>
         <TextField
           autoComplete="off"
-          id="outlined"
           label="Packages"
           placeholder="#"
           value={itemCountValue}
           onInput={onInputItemCount}
           onBlur={handleOnBlurItemCount}
           error={!isItemCountValid}
+          sx={{
+            [`& fieldset`]: {
+              borderRadius: 100,
+            },
+        }}
+
         />
         {!isItemCountValid && (
           <FormHelperText error={!isItemCountValid}>
@@ -247,14 +270,14 @@ export default function Form(props) {
       </FormControl>
       <br />
 
-      <Button sx={{ m: 1}} type="submit"
+      <Button sx={{ m: 1, borderRadius: theme.button.borderRadius}} type="submit"
 variant="contained" >
         Add Points
       </Button>
       <PointHistory/>
 
       </form>
-
+</ThemeProvider>
     </div>
   );
 }   

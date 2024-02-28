@@ -19,6 +19,7 @@ import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import {theme} from './CustomTheme.js'
 
 export default function PointHistory() {
     const { squads } = useContext(SquadsContext);
@@ -66,7 +67,7 @@ export default function PointHistory() {
   return (
         <React.Fragment>
 
-      <Button onClick={handleClickOpen}>Point History</Button>
+      <Button onClick={handleClickOpen} sx = {{borderRadius: theme.button.borderRadius}}>Point History</Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -93,6 +94,7 @@ export default function PointHistory() {
                               onClick={() =>
                                 handleDeleteEntry(squad.name, entry.id)
                               }
+                              
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -111,7 +113,7 @@ export default function PointHistory() {
     
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Done</Button>
+          <Button onClick={handleClose} sx = {{borderRadius: theme.button.borderRadius}}>Done</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

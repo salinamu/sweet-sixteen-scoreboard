@@ -39,7 +39,7 @@ function MenuAppBar(props) {
   };
 
   return (
-    <AppBar position="static" color ="transparent" elevation = {0} >
+    <AppBar position="static" color ="transparent" elevation = {0}>
       <Container maxWidth="xl" style={{ margin: 0, padding: 0}}>
         <Toolbar disableGutters >
           <CakeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'primary.main'}} />
@@ -52,7 +52,6 @@ function MenuAppBar(props) {
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontWeight: 700,
-              letterSpacing: '.3rem',
               textDecoration: 'none',
               color: 'primary.main',
             }}
@@ -108,7 +107,6 @@ function MenuAppBar(props) {
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontWeight: 700,
-              letterSpacing: '.3rem',
               textDecoration: 'none',
               color: 'primary.main',
             }}
@@ -134,7 +132,7 @@ function MenuAppBar(props) {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+ 
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{

@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
 import Form from "./components/Form.js";
-import Scoreboard from "./components/Scoreboard.js";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -16,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Leaderboard from "./components/Leaderboard.js";
 import Container from "@mui/material/Container";
 import ConsecutiveSnackbars from "./components/ConsecutiveSnackbars.js";
+import { Typography } from "@mui/material";
 
 // Create a new context and exports
 export const SquadsContext = createContext();
@@ -86,45 +86,33 @@ function App() {
   handleAddTreat("Cookies and Cupcakes", 12, 6);
 
   return (
-      <ThemeProvider theme={theme}>
-            <div  style={{ background: theme.palette.primary.mainGradient }}>
+    <ThemeProvider theme={theme}>
+    <Box sx={{ background: theme.palette.primary.mainGradient }}>
+      <SquadsContext.Provider value={{ squads, setSquads, prevSquad, setPrevSquad }}>
+        <TreatsContext.Provider value={{ treats, setTreats }}>
+          <Container maxWidth="lg">
 
-        <SquadsContext.Provider value={{ squads, setSquads, prevSquad, setPrevSquad }}>
-          <TreatsContext.Provider value={{ treats, setTreats }}>
+            <Grid container justifyContent="center" alignItems="center">
+            <MenuAppBar appName="Sweet16" />
 
-            <Container fluid>
-
-              <Grid container spacing={0} columns={12} >
-              <MenuAppBar appName="Sweet16"/>
-
-
-                <Grid item xs={6}>
-                  
-                  <Leaderboard />
-                </Grid>
-                <Grid item xs={6}>
-                  <Box
-                    sx={{
-                      m: 1,
-                      fontWeight: "fontWeightBold",
-                      fontSize: "h5.fontSize",
-                    }}
-                  >
-                    Add Points
-                  </Box>
-                  <Form addMessage={addMessageToSnackPack} />
-                </Grid>
+              <Grid item xs={12} sm={5.9} sx={{
+                paddingRight: { sm: 1 }, // Add right padding on sm screens and larger to the first item
+                paddingBottom: { xs: 2, sm: 0 }, // Add bottom padding on xs screens to the first item
+              }}>
+                <Leaderboard />
               </Grid>
-              <ConsecutiveSnackbars
-                snackPack={snackPack}
-                setSnackPack={setSnackPack}
-              />
-            </Container>
-          </TreatsContext.Provider>
-        </SquadsContext.Provider>
-        </div>
-
-      </ThemeProvider>
+              <Grid item xs={12} sm={5.9} sx={{
+                paddingLeft: { sm: 1 }, // Add left padding on sm screens and larger to the second item
+              }}>
+                <Form addMessage={addMessageToSnackPack} />
+              </Grid>
+            </Grid>
+            <ConsecutiveSnackbars snackPack={snackPack} setSnackPack={setSnackPack} />
+          </Container>
+        </TreatsContext.Provider>
+      </SquadsContext.Provider>
+    </Box>
+  </ThemeProvider>
   );
 }
 

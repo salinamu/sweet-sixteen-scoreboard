@@ -9,13 +9,13 @@ export const theme = createTheme ( {
   palette: {
     mode: 'light',
     primary: {
-      main: '#654FE9',
+      main: 'rgb(101, 79, 233)',
       mainGradient: 'linear-gradient(0deg, rgb(255, 255, 255), rgb(244, 230, 255))',
 
     },
     secondary: {
-      main: '#654FE9',
-      mainGradient: 'linear-gradient(90deg, rgb(255, 230, 253, 100%), rgb(231, 253, 253, 100%))',
+      main: 'rgb(101, 79, 233)',
+      mainGradient: 'linear-gradient(90deg, #fde1f8, #f5e6ff, #edeaff, #e7efff, #e2f3ff, #e1f6ff, #e2f9ff, #e6fbfd)',
 
     },
    

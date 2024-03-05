@@ -10,14 +10,17 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import PointHistory from "./PointHistory";
-import {theme} from './CustomTheme.js'
-import { ThemeProvider } from '@mui/material/styles';
+import { theme } from "./CustomTheme.js";
+import { ThemeProvider } from "@mui/material/styles";
+import Box from '@mui/material/Box';
+import '../form.css'
 
 
 export default function Form(props) {
   const [pieceCountValue, setPieceCountValue] = useState("");
   const [itemCountValue, setItemCountValue] = useState("");
-  const { squads, setSquads, prevSquad, setPrevSquad } = useContext(SquadsContext);
+  const { squads, setSquads, prevSquad, setPrevSquad } =
+    useContext(SquadsContext);
   const { treats } = useContext(TreatsContext);
   const [squadOptionValue, setSquadOptionValue] = useState("");
   const [treatOptionValue, setTreatOptionValue] = useState("");
@@ -143,21 +146,32 @@ export default function Form(props) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    var timestamp = new Date();
-  timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  var enteredPoints = Math.round(
-    pieceCountValue *
-      getPointsMultiplier(treatOptionValue) *
-      itemCountValue
-  );
+// Create a new date object for the current date and time
+const currentDate = new Date();
+
+// Define options for formatting the date
+const dateFormatOptions = {
+    year: 'numeric',
+    month: 'short', // Use abbreviated month name
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+};
+
+// Create an Intl.DateTimeFormat instance with US English locale and the defined options
+const dateTimeFormatter = new Intl.DateTimeFormat('en-US', dateFormatOptions);
+
+// Format the current date
+const timestamp = dateTimeFormatter.format(currentDate);
+
+console.log(timestamp);    var enteredPoints = Math.round(
+      pieceCountValue * getPointsMultiplier(treatOptionValue) * itemCountValue
+    );
     if (validate()) {
-      updateLog(
-        squadOptionValue,
-        enteredPoints,
-        treatOptionValue,
-        timestamp
+      updateLog(squadOptionValue, enteredPoints, treatOptionValue, timestamp);
+      props.addMessage(
+        enteredPoints + " points added to squad " + squadOptionValue
       );
-      props.addMessage(enteredPoints + " points added to squad " + squadOptionValue)
       setPrevSquad(squadOptionValue);
       setPieceCountValue("");
       setItemCountValue("");
@@ -166,118 +180,129 @@ export default function Form(props) {
     }
   }
   return (
-    <div>
-          <ThemeProvider theme={theme}>
-
-      <form onSubmit = {handleSubmit}>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="squad-select-label">Squad</InputLabel>
-        <Select
-          labelId="squad-select-label"
-          id="squad-select"
-          value={squadOptionValue}
-          label="Squad"
-          onChange={handleSelectSquadOption}
-          autoWidth
-          error={!isSquadOptionValid}
-          onBlur={handleOnBlurSquadOption}
-          sx={{
-            [`& fieldset`]: {
-              borderRadius: 100,
-            },
+    <div className="form">
+      <Box
+        sx={{
+          m: 1,
+          fontWeight: "fontWeightBold",
+          fontSize: "h5.fontSize",
         }}
-        >
-          {squads.map((squad) => {
-            return <MenuItem value={squad.name}>{squad.name}</MenuItem>;
-          })}
-        </Select>
-        {!isSquadOptionValid && (
-          <FormHelperText error={!isSquadOptionValid}>
-            Select squad
-          </FormHelperText>
-        )}
-      </FormControl>
+      >
+        New Treat
+      </Box>
+      <ThemeProvider theme={theme}>
+        <form onSubmit={handleSubmit}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="squad-select-label">Squad</InputLabel>
+            <Select
+              labelId="squad-select-label"
+              id="squad-select"
+              value={squadOptionValue}
+              label="Squad"
+              onChange={handleSelectSquadOption}
+              autoWidth
+              error={!isSquadOptionValid}
+              onBlur={handleOnBlurSquadOption}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 100,
+                },
+              }}
+            >
+              {squads.map((squad) => {
+                return <MenuItem value={squad.name}>{squad.name}</MenuItem>;
+              })}
+            </Select>
+            {!isSquadOptionValid && (
+              <FormHelperText error={!isSquadOptionValid}>
+                Select squad
+              </FormHelperText>
+            )}
+          </FormControl>
 
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="treat-select-label">Treat</InputLabel>
-        <Select
-          labelId="treat-select-label"
-          id="treat-select"
-          value={treatOptionValue}
-          label="Treat"
-          onChange={handleSelectTreatOption}
-          autoWidth
-          error={!isTreatOptionValid}
-          onBlur={handleOnBlurTreatOption}
-          sx={{
-            [`& fieldset`]: {
-              borderRadius: 100,
-            },
-        }}
-        >
-          {treats.map((treat) => {
-            return <MenuItem value={treat.category}>{treat.category}</MenuItem>;
-          })}
-        </Select>
-        {!isTreatOptionValid && (
-          <FormHelperText error={!isTreatOptionValid}>
-            Select treat
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl sx={{ m: 1, maxWidth: 120 }}>
-        <TextField
-          autoComplete="off"
-          label="Pieces"
-          placeholder="#"
-          value={pieceCountValue}
-          onInput={onInputPieceCount}
-          onBlur={handleOnBlurPieceCount}
-          error={!isPieceCountValid}
-          sx={{
-            [`& fieldset`]: {
-              borderRadius: 100,
-            },
-        }}
-        />
-        {!isPieceCountValid && (
-          <FormHelperText error={!isPieceCountValid}>
-            Enter # of pieces
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl sx={{ m: 1, maxWidth: 120 }}>
-        <TextField
-          autoComplete="off"
-          label="Packages"
-          placeholder="#"
-          value={itemCountValue}
-          onInput={onInputItemCount}
-          onBlur={handleOnBlurItemCount}
-          error={!isItemCountValid}
-          sx={{
-            [`& fieldset`]: {
-              borderRadius: 100,
-            },
-        }}
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="treat-select-label">Treat</InputLabel>
+            <Select
+              labelId="treat-select-label"
+              id="treat-select"
+              value={treatOptionValue}
+              label="Treat"
+              onChange={handleSelectTreatOption}
+              autoWidth
+              error={!isTreatOptionValid}
+              onBlur={handleOnBlurTreatOption}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 100,
+                },
+              }}
+            >
+              {treats.map((treat) => {
+                return (
+                  <MenuItem value={treat.category}>{treat.category}</MenuItem>
+                );
+              })}
+            </Select>
+            {!isTreatOptionValid && (
+              <FormHelperText error={!isTreatOptionValid}>
+                Select treat
+              </FormHelperText>
+            )}
+          </FormControl>
+          <FormControl sx={{ m: 1, maxWidth: 120 }}>
+            <TextField
+              autoComplete="off"
+              label="Pieces"
+              placeholder="#"
+              value={pieceCountValue}
+              onInput={onInputPieceCount}
+              onBlur={handleOnBlurPieceCount}
+              error={!isPieceCountValid}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 100,
+                },
+              }}
+            />
+            {!isPieceCountValid && (
+              <FormHelperText error={!isPieceCountValid}>
+                Enter # of pieces
+              </FormHelperText>
+            )}
+          </FormControl>
+          <FormControl sx={{ m: 1, maxWidth: 120 }}>
+            <TextField
+              autoComplete="off"
+              label="Packages"
+              placeholder="#"
+              value={itemCountValue}
+              onInput={onInputItemCount}
+              onBlur={handleOnBlurItemCount}
+              error={!isItemCountValid}
+              sx={{
+                [`& fieldset`]: {
+                  borderRadius: 100,
+                },
+              }}
+            />
+            {!isItemCountValid && (
+              <FormHelperText error={!isItemCountValid}>
+                Enter # of packages
+              </FormHelperText>
+            )}
+          </FormControl>
+          <br />
 
-        />
-        {!isItemCountValid && (
-          <FormHelperText error={!isItemCountValid}>
-            Enter # of packages
-          </FormHelperText>
-        )}
-      </FormControl>
-      <br />
-
-      <Button sx={{ m: 1, borderRadius: theme.button.borderRadius}} type="submit"
-variant="contained" >
-        Add Points
-      </Button>
-      <PointHistory/>
-
-      </form>
-</ThemeProvider>
+          <Button
+            sx={{ m: 1, borderRadius: theme.button.borderRadius }}
+            type="submit"
+            variant="contained"
+          >
+            Add Points
+          </Button>
+          <PointHistory />
+        </form>
+      </ThemeProvider>
     </div>
   );
-}   
+}

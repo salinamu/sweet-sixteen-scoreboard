@@ -1,18 +1,18 @@
 import "../rankedsquad.css"
 import {theme} from './CustomTheme.js';
-export default function RankedSquad(props) {
+export default function RankedSquad({ rank, squadName, points, tied }) {
 
     return (
         <div>
             <div className="squad" style = {{background: theme.palette.secondary.mainGradient}}>
             <div className="rank">
-                #{props.rank}
+                {rank}{tied}
             </div>
             <div className="squadName">
-            {props.squadName}
+            {squadName}
             </div>
             <div className="points">
-            {props.points}
+            {points}
             </div>
             </div>
             

@@ -12,13 +12,19 @@ import FormHelperText from "@mui/material/FormHelperText";
 import PointHistory from "./PointHistory";
 import { theme } from "./CustomTheme.js";
 import { ThemeProvider } from "@mui/material/styles";
-import Box from '@mui/material/Box';
-import '../form.css'
-
+import Box from "@mui/material/Box";
+import "../form.css";
+import QuantityInput from "./QuantityInput.js";
 
 export default function Form(props) {
   const [pieceCountValue, setPieceCountValue] = useState("");
-  const [itemCountValue, setItemCountValue] = useState("");
+  const [quantity, setQuantity] = useState(1); // Initialize quantity with 1
+  // In Form.js, within the Form component
+  const handleQuantityChange = (e) => {
+    setQuantity(e.target.value); // Directly use the newValue
+    console.log("Updating quantity to:", e.target.value);
+  };
+
   const { squads, setSquads, prevSquad, setPrevSquad } =
     useContext(SquadsContext);
   const { treats } = useContext(TreatsContext);
@@ -27,7 +33,6 @@ export default function Form(props) {
   const [isSquadOptionValid, setIsSquadOptionValid] = useState(true);
   const [isTreatOptionValid, setIsTreatOptionValid] = useState(true);
   const [isPieceCountValid, setIsPieceCountValid] = useState(true);
-  const [isItemCountValid, setIsItemCountValid] = useState(true);
 
   var pointsMultiplier = 1;
   const onInputPieceCount = (e) => {
@@ -35,11 +40,7 @@ export default function Form(props) {
     setPieceCountValue(newValue);
     validatePieceCount(newValue);
   };
-  const onInputItemCount = (e) => {
-    var newValue = e.target.value.replace(/[^0-9]/g, "");
-    setItemCountValue(newValue);
-    validateItemCount(newValue);
-  };
+
   const handleSelectTreatOption = (e) => {
     setTreatOptionValue(e.target.value);
     validateTreatOption(e.target.value);
@@ -51,9 +52,7 @@ export default function Form(props) {
   const handleOnBlurPieceCount = () => {
     validatePieceCount(pieceCountValue);
   };
-  const handleOnBlurItemCount = () => {
-    validateItemCount(itemCountValue);
-  };
+
   const handleOnBlurSquadOption = () => {
     validateSquadOption(squadOptionValue);
   };
@@ -70,13 +69,7 @@ export default function Form(props) {
       setIsPieceCountValid(true);
     }
   }
-  function validateItemCount(val) {
-    if (!isFilled(val)) {
-      setIsItemCountValid(false);
-    } else {
-      setIsItemCountValid(true);
-    }
-  }
+
   function validateSquadOption(val) {
     if (!isFilled(val)) {
       setIsSquadOptionValid(false);
@@ -105,10 +98,7 @@ export default function Form(props) {
       setIsPieceCountValid(false);
       valid = false;
     }
-    if (!isFilled(itemCountValue)) {
-      setIsItemCountValid(false);
-      valid = false;
-    }
+
     return valid;
   }
   function getPointsMultiplier(category) {
@@ -120,6 +110,7 @@ export default function Form(props) {
     });
     return pointsMultiplier;
   }
+
   function updateLog(name, points, category, time) {
     setSquads(
       squads.map((squad) => {
@@ -132,7 +123,6 @@ export default function Form(props) {
                 pointsCount: points,
                 entered: time,
               });
-              console.log(squad.log[squad.log.length - 1].pointsCount);
             }
             return treat;
           });
@@ -143,29 +133,33 @@ export default function Form(props) {
       })
     );
   }
+
   function handleSubmit(event) {
     event.preventDefault();
 
-// Create a new date object for the current date and time
-const currentDate = new Date();
+    // Create a new date object for the current date and time
+    const currentDate = new Date();
 
-// Define options for formatting the date
-const dateFormatOptions = {
-    year: 'numeric',
-    month: 'short', // Use abbreviated month name
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-};
+    // Define options for formatting the date
+    const dateFormatOptions = {
+      year: "numeric",
+      month: "short", // Use abbreviated month name
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
 
-// Create an Intl.DateTimeFormat instance with US English locale and the defined options
-const dateTimeFormatter = new Intl.DateTimeFormat('en-US', dateFormatOptions);
+    // Create an Intl.DateTimeFormat instance with US English locale and the defined options
+    const dateTimeFormatter = new Intl.DateTimeFormat(
+      "en-US",
+      dateFormatOptions
+    );
 
-// Format the current date
-const timestamp = dateTimeFormatter.format(currentDate);
+    // Format the current date
+    const timestamp = dateTimeFormatter.format(currentDate);
 
-console.log(timestamp);    var enteredPoints = Math.round(
-      pieceCountValue * getPointsMultiplier(treatOptionValue) * itemCountValue
+    var enteredPoints = Math.round(
+      pieceCountValue * getPointsMultiplier(treatOptionValue) * quantity
     );
     if (validate()) {
       updateLog(squadOptionValue, enteredPoints, treatOptionValue, timestamp);
@@ -174,7 +168,7 @@ console.log(timestamp);    var enteredPoints = Math.round(
       );
       setPrevSquad(squadOptionValue);
       setPieceCountValue("");
-      setItemCountValue("");
+      setQuantity(1);
       setTreatOptionValue("");
       setSquadOptionValue("");
     }
@@ -271,26 +265,9 @@ console.log(timestamp);    var enteredPoints = Math.round(
             )}
           </FormControl>
           <FormControl sx={{ m: 1, maxWidth: 120 }}>
-            <TextField
-              autoComplete="off"
-              label="Packages"
-              placeholder="#"
-              value={itemCountValue}
-              onInput={onInputItemCount}
-              onBlur={handleOnBlurItemCount}
-              error={!isItemCountValid}
-              sx={{
-                [`& fieldset`]: {
-                  borderRadius: 100,
-                },
-              }}
-            />
-            {!isItemCountValid && (
-              <FormHelperText error={!isItemCountValid}>
-                Enter # of packages
-              </FormHelperText>
-            )}
+            <QuantityInput value={quantity} onChange={handleQuantityChange} />
           </FormControl>
+
           <br />
 
           <Button

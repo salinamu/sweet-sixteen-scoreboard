@@ -135,8 +135,8 @@ export default function Form(props) {
   }
 
   function handleSubmit(event) {
+    
     event.preventDefault();
-
     // Create a new date object for the current date and time
     const currentDate = new Date();
 
@@ -263,10 +263,18 @@ export default function Form(props) {
                 Enter # of pieces
               </FormHelperText>
             )}
+            
+         
           </FormControl>
+          { /*
           <FormControl sx={{ m: 1, maxWidth: 120 }}>
             <QuantityInput value={quantity} onChange={handleQuantityChange} />
           </FormControl>
+           */
+        }
+
+            
+         
 
           <br />
 

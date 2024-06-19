@@ -3,9 +3,21 @@ import { Unstable_NumberInput as BaseNumberInput } from "@mui/base/Unstable_Numb
 import { styled } from "@mui/system";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
+  const [count, setCount] = useState(1);
+  const handleIncrement = () => {
+    setCount(count+1);
+  };
+  const handleDecrement = () => {
+    setCount(count-1);
+  };
   return (
+    <div>
+      
     <BaseNumberInput
+    defaultValue={1}
       slots={{
         root: StyledInputRoot,
         input: StyledInput,
@@ -28,12 +40,13 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
       {...props}
       ref={ref}
     />
+    </div>
   );
 });
 
 export default function QuantityInput({ onChange }) {
-  
-  return (<div><NumberInput aria-label="Quantity Input" min={1} max={99} onChange={onChange}/>
+
+  return (<div><NumberInput aria-label="Quantity Input" min={1} max={99} defaultValue = {1} onChange={onChange}/>
 </div>);
 }
 
